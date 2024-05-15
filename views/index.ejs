@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokerMini</title>
+    <link rel="stylesheet" href="stylesGeneral.css">
+    <link rel="stylesheet" href="pico.green.min.css">
+    <link rel="stylesheet" href="flexboxgrid.min.css">
+</head>
+<body>
+    <main class="container">
+
+        Poker Mini
+        <% if (!game) { %>
+            <form action="/new-game" method="post">
+            <button type="submit">New game</button>
+        </form>
+    <% } else { %>
+
+        <% if (!!handBot) { %>
+            <div class="widget-hand-title">
+                Bot
+            </div>
+                <div class="hands">
+                    <% handBot.forEach(function(card) { %>
+                        <div class="widget-card">
+                            <div class='card-Back'>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+        <% } %>
+
+        <% if (!!handHuman) { %>
+            <div class="widget-hand-title">
+                Joueur
+            </div>
+                <div class="hands">
+                    <% handHuman.forEach(function(card) { %>
+                        <div class="widget-card">
+                            <div class='card-<%= card.rank %>-<%= card.suit %>'>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+        <% } %>
+        
+        <% if (game.hand.currentPlayer === "human") { %>
+            <div class="actions">
+
+                <form action="/play" method="post" class="row">
+                    <button class="col-xs-4" type="submit" name="action" value="check">Check</button>
+                    <div class="row col-xs-4">
+                        <input class="col-xs-4" type="number" name="amount" value="1">
+                        <button class="col-xs-8" type="submit" name="action" value="bet">Bet</button>
+                    </div>
+                    <button class="col-xs-4" type="submit" name="action" value="fold">Fold</button>
+                </form>
+            </div>
+        <% } else { %>
+            <p>Waiting for bot...</p>
+            <script>
+                const id = setInterval(() => {
+                    fetch("/game-status")
+                    .then(res => res.json())
+                    .then(game => {
+                        if (game.hand.currentPlayer === "human") {
+                            clearInterval(id)
+                            location.reload()
+                        }
+                    })
+                }, 500)
+                </script>
+        <% } %>
+        
+        <% } %>
+        
+    </main>
+    </body>
+</html>
