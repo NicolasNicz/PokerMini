@@ -83,7 +83,7 @@ export function createApp() {
     res.render("index", {
       game: game,
       handHuman: hands?.human,
-      handBot: hands?.bot
+      handBot: hands?.bot,  
     });
   });
 

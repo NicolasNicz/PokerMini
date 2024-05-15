@@ -2,107 +2,151 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    border-bottom: 5px dashed #398712;;
+    margin-bottom: 10px;
 }
 
 .widget-card{
     margin: 20px;
-    width: 200px;
-    height: 250px;
+    width: 150px;
+    height: 200px;
 }
 
 .widget-hand-title{
     text-align: center;
     margin: 5px;
-    border-top: 5px dashed #398712;;
+    border-top: 5px dashed #398712;
 }
+
+.bet-title-container{
+    display: flex;
+    justify-content: center;
+}
+
+.bet-title{
+    background-color: #46a716;
+    color: #fff;
+    width:fit-content;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-top: 3px solid #000;
+    border-left: 3px solid #000;
+    border-right: 3px solid #000;
+}
+
+.bet-box{
+    background-color: #46a716;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 3px solid #000;
+    border-radius: 5px;
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+.one-bet{
+    background-image: url(./cards/jeton.png);
+    background-size: 30px 30px;
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    margin-right: 3px;
+
+
+    
+}
+
 
 .card-9-P{
     background-image: url(./cards/P_9.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-T-P{
     background-image: url(./cards/P_T.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-J-P{
     background-image: url(./cards/P_J.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-Q-P{
     background-image: url(./cards/P_Q.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-K-P{
     background-image: url(./cards/P_K.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-A-P{
     background-image: url(./cards/P_A.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-9-C{
     background-image: url(./cards/C_9.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-T-C{
     background-image: url(./cards/C_T.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-J-C{
     background-image: url(./cards/C_J.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-Q-C{
     background-image: url(./cards/C_Q.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-K-C{
     background-image: url(./cards/C_K.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-A-C{
     background-image: url(./cards/C_A.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }
 
 .card-Back{
     background-image: url(./cards/Back.png);
-    background-size: 200px 250px;
-    width: 200px;
-    height: 250px;
+    background-size: 150px 200px;
+    width: 150px;
+    height: 200px;
 }

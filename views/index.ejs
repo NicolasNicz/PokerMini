@@ -32,6 +32,20 @@
                 </div>
         <% } %>
 
+        <div class="bet-title-container">
+            <div class="bet-title">
+                Pot
+            </div>
+            
+        </div>
+        <div class="bet-box">
+                <% for (let i = 0; i < game.hand.pot; i++) { %>
+                    <div class="one-bet">
+                        <!-- <%=game.hand.pot%>-->
+                    </div>
+                <% } %>
+        </div>
+
         <% if (!!handHuman) { %>
             <div class="widget-hand-title">
                 Joueur
