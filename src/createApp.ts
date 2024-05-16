@@ -1,4 +1,7 @@
 import express from "express";
+import { HandName } from "../src/poker/poker";
+import { theBestHandIs } from "../src/poker/poker";
+import { log } from "console";
 
 export function createApp() {
   const app = express();
@@ -18,6 +21,24 @@ export function createApp() {
     else if (randomChoice == 2){
       return amount + 2;
     }
+  }
+
+  function refillPackOfCards(): void {
+    packOfCards.length = 0;
+    packOfCards.push(
+        { ...carte_9, famille: famille_P },
+        { ...carte_T, famille: famille_P },
+        { ...carte_J, famille: famille_P },
+        { ...carte_Q, famille: famille_P },
+        { ...carte_K, famille: famille_P },
+        { ...carte_A, famille: famille_P },
+        { ...carte_9, famille: famille_C },
+        { ...carte_T, famille: famille_C },
+        { ...carte_J, famille: famille_C },
+        { ...carte_Q, famille: famille_C },
+        { ...carte_K, famille: famille_C },
+        { ...carte_A, famille: famille_C }
+    );
   }
   
   let game: any = null;
@@ -74,18 +95,6 @@ export function createApp() {
   }
 
   const packOfCards: Carte[] = [
-    { ...carte_9, famille: famille_P },
-    { ...carte_T, famille: famille_P },
-    { ...carte_J, famille: famille_P },
-    { ...carte_Q, famille: famille_P },
-    { ...carte_K, famille: famille_P },
-    { ...carte_A, famille: famille_P },
-    { ...carte_9, famille: famille_C },
-    { ...carte_T, famille: famille_C },
-    { ...carte_J, famille: famille_C },
-    { ...carte_Q, famille: famille_C },
-    { ...carte_K, famille: famille_C },
-    { ...carte_A, famille: famille_C }
   ];
 
   app.use(express.static("public"));
@@ -106,32 +115,31 @@ export function createApp() {
       }
 
     }
-
-
-
   });
 
   app.post("/new-game", (req, res) => {
 
-    const randomPlayerCard1 = drawCard(packOfCards);
-    const randomPlayerCard2 = drawCard(packOfCards);
-
-    const randomBotCard1 = drawCard(packOfCards);
-    const randomBotCard2 = drawCard(packOfCards);
+    refillPackOfCards();
 
     hands = {
       human: [],
       bot: [],
     };
     game = {
+      packOfCards: packOfCards,
       balances: {
         human: 100,
         bot: 100,
       },
+      winner:'',
       hand: {
         stage: "ante",
         currentPlayer: "human",
         pot: 0,
+        name: {
+          human:'',
+          bot:'',
+        },
         bets: {
           human: 0,
           bot: 0,
@@ -144,13 +152,19 @@ export function createApp() {
     game.hand.pot += 1;
     game.hand.stage = "turn1";
 
+    const randomPlayerCard1 = drawCard(game.packOfCards);
+    const randomPlayerCard2 = drawCard(game.packOfCards);
+
+    const randomBotCard1 = drawCard(game.packOfCards);
+    const randomBotCard2 = drawCard(game.packOfCards);
+
     hands.human = [
-      { rank: randomPlayerCard1.name, suit: randomPlayerCard1.famille.name },
-      { rank: randomPlayerCard2.name, suit: randomPlayerCard2.famille.name },
+      { rank: randomPlayerCard1, suit: randomPlayerCard1.famille },
+      { rank: randomPlayerCard2, suit: randomPlayerCard2.famille },
     ];
     hands.bot = [
-      { rank: randomBotCard1.name, suit: randomBotCard1.famille.name },
-      { rank: randomBotCard2.name, suit: randomBotCard2.famille.name },
+      { rank: randomBotCard1, suit: randomBotCard1.famille },
+      { rank: randomBotCard2, suit: randomBotCard2.famille },
     ];
 
     res.redirect("/");
@@ -171,8 +185,6 @@ export function createApp() {
     if (req.body.action === "bet") {
       const amount = parseInt(req.body.amount, 10);
       game.hand.bets.human += amount;
-
-      console.log("NOMBRE DE BET DU JOUEUR" + game.hand.bets.human);
       
       game.balances.human -= amount;
       game.hand.currentPlayer = "bot";
@@ -202,14 +214,61 @@ export function createApp() {
           game.hand.pot += potToAdd;
           game.hand.bets.human = 0;
           game.hand.bets.bot = 0;
-          game.lastAction = 'startTurn2';
-          game.hand.stage = "turn2";
-    
-          const randomPlayerCard3 = drawCard(packOfCards);
-          const randomBotCard3 = drawCard(packOfCards);
-    
-          hands.human.push({ rank: randomPlayerCard3.name, suit: randomPlayerCard3.famille.name });
-          hands.bot.push({ rank: randomBotCard3.name, suit: randomBotCard3.famille.name });
+          if (game.hand.stage === "turn2"){
+            game.hand.stage = 'showResult';
+
+            const mainHuman = {
+              carte1 : [hands.human[0].rank, hands.human[0].suit],
+              carte2 : [hands.human[1].rank, hands.human[1].suit],
+              carte3 : [hands.human[2].rank, hands.human[2].suit]
+            }
+
+            console.log('HAND' + hands.human[0].rank, hands.human[0].suit);
+            console.log('HAND' + hands.human[1].rank, hands.human[1].suit);
+            console.log('HAND' + hands.human[2].rank, hands.human[2].suit);
+            
+      
+            const mainBot= {
+              carte1 : [hands.bot[0].rank, hands.bot[0].suit],
+              carte2 : [hands.bot[1].rank, hands.bot[1].suit],
+              carte3 : [hands.bot[2].rank, hands.bot[2].suit]
+            }
+            const nameMainHuman = HandName(mainHuman);
+            const nameMainBot = HandName(mainBot);
+      
+      
+            game.hand.name.human = nameMainHuman;
+            game.hand.name.bot = nameMainBot;
+      
+            const theWinner = theBestHandIs(nameMainHuman, nameMainBot, mainHuman, mainBot);
+      
+            if (theWinner == 'main1'){
+              game.winner = 'Joueur'
+              game.balances.human += game.hand.pot
+
+            }
+            else if (theWinner == 'main2'){
+              game.winner = 'Bot'
+              game.balances.bot += game.hand.pot
+            }
+            else{
+              game.winner = 'draw'
+              const sharing = game.hand.pot/2;
+              game.balances.human += sharing;
+              game.balances.bot += sharing;
+            }
+
+          }
+          else{
+            game.lastAction = 'startTurn2';
+            game.hand.stage = "turn2";
+      
+            const randomPlayerCard3 = drawCard(game.packOfCards);
+            const randomBotCard3 = drawCard(game.packOfCards);
+      
+            hands.human.push({ rank: randomPlayerCard3, suit: randomPlayerCard3.famille });
+            hands.bot.push({ rank: randomBotCard3, suit: randomBotCard3.famille });
+          }
         }
 
       }, 2000);
@@ -219,7 +278,12 @@ export function createApp() {
     else if (req.body.action === "call") {
       const numberToCall = game.hand.bets.bot - game.hand.bets.human;
       game.hand.bets.human += numberToCall;
-      game.lastAction = "finishTurn1";
+      if (game.hand.stage === "turn2"){
+        game.hand.stage = 'showResult';
+      }
+      else{
+        game.lastAction = "finishTurn1";
+      }
     }
 
     if (game.lastAction == 'finishTurn1'){
@@ -230,11 +294,59 @@ export function createApp() {
       game.lastAction = 'startTurn2';
       game.hand.stage = "turn2";
 
-      const randomPlayerCard3 = drawCard(packOfCards);
-      const randomBotCard3 = drawCard(packOfCards);
+      const randomPlayerCard3 = drawCard(game.packOfCards);
+      const randomBotCard3 = drawCard(game.packOfCards);
 
-      hands.human.push({ rank: randomPlayerCard3.name, suit: randomPlayerCard3.famille.name });
-      hands.bot.push({ rank: randomBotCard3.name, suit: randomBotCard3.famille.name });
+      hands.human.push({ rank: randomPlayerCard3, suit: randomPlayerCard3.famille });
+      hands.bot.push({ rank: randomBotCard3, suit: randomBotCard3.famille });
+    }
+
+    if (game.hand.stage === 'showResult'){
+      const potToAdd = game.hand.bets.human + game.hand.bets.bot;
+      game.hand.pot += potToAdd;
+      game.hand.bets.human = 0;
+      game.hand.bets.bot = 0;
+
+      const mainHuman = {
+        carte1 : [hands.human[0].rank, hands.human[0].suit],
+        carte2 : [hands.human[1].rank, hands.human[1].suit],
+        carte3 : [hands.human[2].rank, hands.human[2].suit]
+      }
+
+      
+      console.log('HAND' + hands.human[0].rank, hands.human[0].suit);
+      console.log('HAND' + hands.human[1].rank, hands.human[1].suit);
+      console.log('HAND' + hands.human[2].rank, hands.human[2].suit);
+
+      const mainBot= {
+        carte1 : [hands.bot[0].rank, hands.bot[0].suit],
+        carte2 : [hands.bot[1].rank, hands.bot[1].suit],
+        carte3 : [hands.bot[2].rank, hands.bot[2].suit]
+      }
+      const nameMainHuman = HandName(mainHuman);
+      const nameMainBot = HandName(mainBot);
+
+      game.hand.name.human = nameMainHuman;
+      game.hand.name.bot = nameMainBot;
+
+      const theWinner = theBestHandIs(nameMainHuman, nameMainBot, mainHuman, mainBot);
+
+      if (theWinner == 'main1'){
+        game.winner = 'Joueur'
+        game.balances.human += game.hand.pot
+
+      }
+      else if (theWinner == 'main2'){
+        game.winner = 'Bot'
+        game.balances.bot += game.hand.pot
+      }
+      else{
+        game.winner = 'draw'
+        const sharing = game.hand.pot/2;
+        game.balances.human += sharing;
+        game.balances.bot += sharing;
+      }
+
     }
 
     res.redirect("/");

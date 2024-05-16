@@ -10,16 +10,25 @@ html{
     border: 5px solid #000;
 }
 
+.bot-container{
+    border-top: 5px dashed #398712;
+    border-bottom: 5px dashed #398712;
+    margin:10px
+}
+
+
 .hands{
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    border-bottom: 5px dashed #398712;;
-    margin-bottom: 10px;
+}
+
+.widget-result-title{
+    text-align: center;
 }
 
 .widget-card{
-    margin: 20px;
+    margin: 8px;
     width: 150px;
     height: 200px;
 }
@@ -27,7 +36,6 @@ html{
 .widget-hand-title{
     text-align: center;
     margin: 5px;
-    border-top: 5px dashed #398712;
 }
 
 .bet-title-container{
@@ -92,6 +100,18 @@ html{
 .button-space{
     margin: 10px;
 }
+
+.winner{
+    font-size: 40px;
+    font-weight: bold;
+    margin-right: 10px;
+    max-width: 550px;
+}
+
+.jeton-show{
+    width: 6%;
+}
+
 
 .card-9-P{
     background-image: url(./cards/P_9.png);
