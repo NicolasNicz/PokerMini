@@ -7,9 +7,23 @@ export function createApp() {
     const index = Math.floor(Math.random() * paquet.length);
     return paquet.splice(index, 1)[0];
   }
+
+  function BotAction(randomChoice: any, amount: any){
+    if (randomChoice == 0){
+      return 0;
+    }
+    else if (randomChoice == 1){
+      return amount;
+    }
+    else if (randomChoice == 2){
+      return amount + 2;
+    }
+  }
   
   let game: any = null;
   let hands: any = null;
+
+  const choice = ["wait", "call", "raise"];
 
   type Famille = {
     name: string;
@@ -85,6 +99,16 @@ export function createApp() {
       handHuman: hands?.human,
       handBot: hands?.bot,  
     });
+
+    if (game && game.lastAction){
+      if (game.lastAction == 'raise'){
+
+      }
+
+    }
+
+
+
   });
 
   app.post("/new-game", (req, res) => {
@@ -109,7 +133,7 @@ export function createApp() {
         currentPlayer: "human",
         pot: 0,
         bets: {
-          player: 0,
+          human: 0,
           bot: 0,
         },
       },
@@ -119,6 +143,7 @@ export function createApp() {
     game.balances.bot -= 1;
     game.hand.pot += 1;
     game.hand.stage = "turn1";
+
     hands.human = [
       { rank: randomPlayerCard1.name, suit: randomPlayerCard1.famille.name },
       { rank: randomPlayerCard2.name, suit: randomPlayerCard2.famille.name },
@@ -144,18 +169,74 @@ export function createApp() {
       return;
     }
     if (req.body.action === "bet") {
-      const amount = parseInt(req.body.bet || "1");
+      const amount = parseInt(req.body.amount, 10);
       game.hand.bets.human += amount;
+
+      console.log("NOMBRE DE BET DU JOUEUR" + game.hand.bets.human);
+      
       game.balances.human -= amount;
       game.hand.currentPlayer = "bot";
       setTimeout(() => {
         game.lastAction = "bet";
-        game.lastAmount = 1;
+        game.lastAmount = amount;
+        if (game.lastAmount == 1 || game.lastAmount == 2){
+          const randomChoice = Math.floor(Math.random() * 2) + 1;
+          const jetonToAdd = BotAction(randomChoice, amount);
+          const nameAction = choice[randomChoice];
+          game.lastAction = nameAction;
+          game.hand.bets.bot += jetonToAdd;
+        }
+        else{
+          const randomChoice = Math.floor(Math.random() * 3);
+          const jetonToAdd = BotAction(randomChoice, amount);
+          const nameAction = choice[randomChoice];
+          game.lastAction = nameAction;
+          game.hand.bets.bot += jetonToAdd;
+        }
+
         game.balances.bot -= 1;
-        game.hand.bets.bot += 1;
         game.hand.currentPlayer = "human";
-      }, 5000);
+
+        if (game.lastAction !== "raise"){
+          const potToAdd = game.hand.bets.human + game.hand.bets.bot;
+          game.hand.pot += potToAdd;
+          game.hand.bets.human = 0;
+          game.hand.bets.bot = 0;
+          game.lastAction = 'startTurn2';
+          game.hand.stage = "turn2";
+    
+          const randomPlayerCard3 = drawCard(packOfCards);
+          const randomBotCard3 = drawCard(packOfCards);
+    
+          hands.human.push({ rank: randomPlayerCard3.name, suit: randomPlayerCard3.famille.name });
+          hands.bot.push({ rank: randomBotCard3.name, suit: randomBotCard3.famille.name });
+        }
+
+      }, 2000);
     }
+
+
+    else if (req.body.action === "call") {
+      const numberToCall = game.hand.bets.bot - game.hand.bets.human;
+      game.hand.bets.human += numberToCall;
+      game.lastAction = "finishTurn1";
+    }
+
+    if (game.lastAction == 'finishTurn1'){
+      const potToAdd = game.hand.bets.human + game.hand.bets.bot;
+      game.hand.pot += potToAdd;
+      game.hand.bets.human = 0;
+      game.hand.bets.bot = 0;
+      game.lastAction = 'startTurn2';
+      game.hand.stage = "turn2";
+
+      const randomPlayerCard3 = drawCard(packOfCards);
+      const randomBotCard3 = drawCard(packOfCards);
+
+      hands.human.push({ rank: randomPlayerCard3.name, suit: randomPlayerCard3.famille.name });
+      hands.bot.push({ rank: randomBotCard3.name, suit: randomBotCard3.famille.name });
+    }
+
     res.redirect("/");
   });
 

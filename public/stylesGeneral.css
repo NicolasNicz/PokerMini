@@ -1,3 +1,15 @@
+html{
+ background-color: rgb(36, 36, 36);
+ color: #fff;
+}
+
+.container{
+    margin-top: 10px;
+    background-color: #193a08;
+    border-radius: 25px;
+    border: 5px solid #000;
+}
+
 .hands{
     display: flex;
     justify-content: center;
@@ -40,9 +52,21 @@
     justify-content: center;
     flex-wrap: wrap;
     border: 3px solid #000;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-right: 20%;
     margin-left: 20%;
+}
+
+.player-bet-box{
+    background-color: #46a716;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    border: 3px solid #000;
+    border-radius: 10px;
+    margin-right: 35%;
+    margin-left: 35%;
+    min-height: 46px;
 }
 
 .one-bet{
@@ -59,6 +83,15 @@
     
 }
 
+.button-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.button-space{
+    margin: 10px;
+}
 
 .card-9-P{
     background-image: url(./cards/P_9.png);

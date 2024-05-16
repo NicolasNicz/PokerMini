@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="flexboxgrid.min.css">
 </head>
 <body>
+<div class="background">
     <main class="container">
 
-        Poker Mini
         <% if (!game) { %>
             <form action="/new-game" method="post">
             <button type="submit">New game</button>
         </form>
-    <% } else { %>
+        <% } else { %>
 
         <% if (!!handBot) { %>
             <div class="widget-hand-title">
@@ -32,6 +32,14 @@
                 </div>
         <% } %>
 
+        <div class="player-bet-box" style="margin-bottom: 5px;">
+            <% for (let i = 0; i < game.hand.bets.bot; i++) { %>
+                <div class="one-bet">
+                    <!-- Number of bot bets-->
+                </div>
+            <% } %>
+        </div>
+
         <div class="bet-title-container">
             <div class="bet-title">
                 Pot
@@ -44,6 +52,14 @@
                         <!-- <%=game.hand.pot%>-->
                     </div>
                 <% } %>
+        </div>
+
+        <div class="player-bet-box" style="margin-top: 5px;">
+            <% for (let i = 0; i < game.hand.bets.human; i++) { %>
+                <div class="one-bet">
+                    <!-- Number of player bets-->
+                </div>
+            <% } %>
         </div>
 
         <% if (!!handHuman) { %>
@@ -63,16 +79,41 @@
         <% if (game.hand.currentPlayer === "human") { %>
             <div class="actions">
 
-                <form action="/play" method="post" class="row">
-                    <button class="col-xs-4" type="submit" name="action" value="check">Check</button>
-                    <div class="row col-xs-4">
-                        <input class="col-xs-4" type="number" name="amount" value="1">
-                        <button class="col-xs-8" type="submit" name="action" value="bet">Bet</button>
+                <form action="/play" method="post">
+                    <div class="button-container">
+                        <button class="button-space" type="submit" name="action" value="check">Check</button>
+                        <input class="button-space" type="number" name="amount" value="1">
+                        <button id="bet" class="button-space" type="submit" name="action" value="bet">Bet</button>
+                        <button id="call" class="button-space" type="submit" name="action" value="call" disabled>Call</button>
+                        <button class="button-space" type="submit" name="action" value="raise" disabled>Raise</button>
+                        <button class="button-space" type="submit" name="action" value="fold">Fold</button>
                     </div>
-                    <button class="col-xs-4" type="submit" name="action" value="fold">Fold</button>
                 </form>
             </div>
+
+            <% if (game.lastAction === "raise") { %>
+                <script>
+                    const buttonBet = document.getElementById('bet');
+                    buttonBet.disabled = true;
+    
+                    const buttonCall = document.getElementById('call');
+                    buttonCall.disabled = false;
+                </script>
+            <% } %>
+
+            <% if (game.lastAction === "startTurn2") { %>
+                <script>
+                    const buttonBet = document.getElementById('bet');
+                    buttonBet.disabled = false;
+    
+                    const buttonCall = document.getElementById('call');
+                    buttonCall.disabled = true;
+                </script>
+            <% } %>
+
         <% } else { %>
+
+
             <p>Waiting for bot...</p>
             <script>
                 const id = setInterval(() => {
@@ -91,5 +132,6 @@
         <% } %>
         
     </main>
-    </body>
+</div>
+</body>
 </html>
