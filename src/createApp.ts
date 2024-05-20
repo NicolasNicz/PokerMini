@@ -174,6 +174,62 @@ export function createApp() {
     res.json(game);
   });
 
+  app.post("/next-game", (req, res) => {
+    refillPackOfCards();
+
+    const currentBalanceBot = game.balances.bot;
+    const currentBalanceHuman = game.balances.human;
+
+    hands = {
+      human: [],
+      bot: [],
+    };
+    game = {
+      packOfCards: packOfCards,
+      balances: {
+        human: currentBalanceHuman,
+        bot: currentBalanceBot,
+      },
+      winner:'',
+      hand: {
+        stage: "ante",
+        currentPlayer: "human",
+        pot: 0,
+        name: {
+          human:'',
+          bot:'',
+        },
+        bets: {
+          human: 0,
+          bot: 0,
+        },
+      },
+    };
+    game.balances.human -= 1;
+    game.hand.pot += 1;
+    game.balances.bot -= 1;
+    game.hand.pot += 1;
+    game.hand.stage = "turn1";
+
+    const randomPlayerCard1 = drawCard(game.packOfCards);
+    const randomPlayerCard2 = drawCard(game.packOfCards);
+
+    const randomBotCard1 = drawCard(game.packOfCards);
+    const randomBotCard2 = drawCard(game.packOfCards);
+
+    hands.human = [
+      { rank: randomPlayerCard1, suit: randomPlayerCard1.famille },
+      { rank: randomPlayerCard2, suit: randomPlayerCard2.famille },
+    ];
+    hands.bot = [
+      { rank: randomBotCard1, suit: randomBotCard1.famille },
+      { rank: randomBotCard2, suit: randomBotCard2.famille },
+    ];
+
+    res.redirect("/");
+  });
+
+
   app.post("/play", (req, res) => {
     console.log("betting");
     console.log(game);
@@ -182,6 +238,16 @@ export function createApp() {
       res.redirect("/");
       return;
     }
+
+    if (req.body.action === "fold") {
+      game.balances.bot += game.hand.pot;
+      game.lastAction = "fold";
+      game.winner = "Bot";
+      res.redirect("/");
+      return;
+    }
+
+
     if (req.body.action === "bet") {
       const amount = parseInt(req.body.amount, 10);
       game.hand.bets.human += amount;
@@ -197,6 +263,7 @@ export function createApp() {
           const nameAction = choice[randomChoice];
           game.lastAction = nameAction;
           game.hand.bets.bot += jetonToAdd;
+          game.balances.bot -= jetonToAdd;
         }
         else{
           const randomChoice = Math.floor(Math.random() * 3);
@@ -204,9 +271,9 @@ export function createApp() {
           const nameAction = choice[randomChoice];
           game.lastAction = nameAction;
           game.hand.bets.bot += jetonToAdd;
+          game.balances.bot -= jetonToAdd;
         }
 
-        game.balances.bot -= 1;
         game.hand.currentPlayer = "human";
 
         if (game.lastAction !== "raise"){
@@ -243,13 +310,13 @@ export function createApp() {
             const theWinner = theBestHandIs(nameMainHuman, nameMainBot, mainHuman, mainBot);
       
             if (theWinner == 'main1'){
-              game.winner = 'Joueur'
-              game.balances.human += game.hand.pot
+              game.winner = 'Joueur';
+              game.balances.human += game.hand.pot;
 
             }
             else if (theWinner == 'main2'){
-              game.winner = 'Bot'
-              game.balances.bot += game.hand.pot
+              game.winner = 'Bot';
+              game.balances.bot += game.hand.pot;
             }
             else{
               game.winner = 'draw'
@@ -278,12 +345,17 @@ export function createApp() {
     else if (req.body.action === "call") {
       const numberToCall = game.hand.bets.bot - game.hand.bets.human;
       game.hand.bets.human += numberToCall;
+      game.balances.human -= numberToCall;
       if (game.hand.stage === "turn2"){
         game.hand.stage = 'showResult';
       }
       else{
         game.lastAction = "finishTurn1";
       }
+    }
+
+    if (game.lastAction == 'fold'){
+
     }
 
     if (game.lastAction == 'finishTurn1'){

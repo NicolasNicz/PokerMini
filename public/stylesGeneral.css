@@ -3,11 +3,65 @@ html{
  color: #fff;
 }
 
-.container{
+.bot-info-container{
+    margin-left: 5px;
+    height: 100%;
+    margin-top: 140px;
+    margin-bottom: 10px;
+    width: 130px;
+    padding-right: 10px;
+    float: left;
+}
+
+.bot-info{
+    position: static;
+    margin: 0 0 15px 0;
+    background-color: #398712;
+    border: 3px solid rgb(1, 0, 47);
+    border-top: 5px solid #000;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.partie-info{
+    position: static;
+    margin: 112px 0 15px 0;
+    background-color: #398712;
+    border: 3px solid rgb(1, 0, 47);
+    border-top: 5px solid #000;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.player-info{
+    position: static;
+    margin: 130px 0 15px 0;
+    background-color: #398712;
+    border: 3px solid rgb(1, 0, 47);
+    border-top: 5px solid #000;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.player-info-title{
+    font-size: 1.2em;
+    background-color: #23510c;
+    text-align: center;
+}
+
+.player-info-jetons{
+    margin: 5px;
+    font-size: 1.0em;
+    text-align: center;
+}
+
+.game-container{
+    width: 80%;
     margin-top: 10px;
     background-color: #193a08;
     border-radius: 25px;
     border: 5px solid #000;
+    float: left;
 }
 
 .bot-container{
@@ -110,6 +164,10 @@ html{
 
 .jeton-show{
     width: 6%;
+}
+
+.jeton-info{
+    width: 30%;
 }
 
 
