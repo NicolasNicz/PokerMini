@@ -1,101 +1,16 @@
 import express from "express";
-import { HandName } from "../src/poker/poker";
-import { theBestHandIs } from "../src/poker/poker";
+import { HandName, theBestHandIs, drawCard, BotAction, refillPackOfCards, newPackOfCards } from "../src/poker/poker";
 import { log } from "console";
 
 export function createApp() {
   const app = express();
 
-  function drawCard(paquet: Carte[]): Carte {
-    const index = Math.floor(Math.random() * paquet.length);
-    return paquet.splice(index, 1)[0];
-  }
-
-  function BotAction(randomChoice: any, amount: any){
-    if (randomChoice == 0){
-      return 0;
-    }
-    else if (randomChoice == 1){
-      return amount;
-    }
-    else if (randomChoice == 2){
-      return amount + 2;
-    }
-  }
-
-  function refillPackOfCards(): void {
-    packOfCards.length = 0;
-    packOfCards.push(
-        { ...carte_9, famille: famille_P },
-        { ...carte_T, famille: famille_P },
-        { ...carte_J, famille: famille_P },
-        { ...carte_Q, famille: famille_P },
-        { ...carte_K, famille: famille_P },
-        { ...carte_A, famille: famille_P },
-        { ...carte_9, famille: famille_C },
-        { ...carte_T, famille: famille_C },
-        { ...carte_J, famille: famille_C },
-        { ...carte_Q, famille: famille_C },
-        { ...carte_K, famille: famille_C },
-        { ...carte_A, famille: famille_C }
-    );
-  }
-  
+  let packOfCards = newPackOfCards();
   let game: any = null;
   let hands: any = null;
 
   const choice = ["wait", "call", "raise"];
 
-  type Famille = {
-    name: string;
-  };
-
-  type Carte = {
-    name: string;
-    importance: number;
-    famille: Famille;
-  };
-
-  const famille_P: Famille = {
-    name: "P"
-  };
-
-  const famille_C: Famille = {
-    name: "C"
-  };
-
-  const carte_9 = {
-      name : "9",
-      importance : 0
-  }
-
-  const carte_T = {
-      name : "T",
-      importance : 1
-  }
-
-  const carte_J = {
-      name : "J",
-      importance : 2
-  }
-
-  const carte_Q = {
-      name : "Q",
-      importance : 3
-  }
-
-  const carte_K = {
-      name : "K",
-      importance : 4
-  }
-
-  const carte_A = {
-      name : "A",
-      importance : 5
-  }
-
-  const packOfCards: Carte[] = [
-  ];
 
   app.use(express.static("public"));
   app.set("views", "./views")
@@ -108,13 +23,6 @@ export function createApp() {
       handHuman: hands?.human,
       handBot: hands?.bot,  
     });
-
-    if (game && game.lastAction){
-      if (game.lastAction == 'raise'){
-
-      }
-
-    }
   });
 
   app.post("/new-game", (req, res) => {
@@ -133,6 +41,7 @@ export function createApp() {
       },
       round: 1,
       winner:'',
+      finalwinner:'',
       hand: {
         stage: "ante",
         currentPlayer: "human",
@@ -142,6 +51,10 @@ export function createApp() {
           bot:'',
         },
         bets: {
+          human: 0,
+          bot: 0,
+        },
+        wins: {
           human: 0,
           bot: 0,
         },
@@ -181,6 +94,8 @@ export function createApp() {
     const currentBalanceBot = game.balances.bot;
     const currentBalanceHuman = game.balances.human;
     const currentRound = game.round;
+    const winsplayer = game.hand.wins.human;
+    const winsbot = game.hand.wins.bot;
 
     hands = {
       human: [],
@@ -194,6 +109,7 @@ export function createApp() {
       },
       round: currentRound+1,
       winner:'',
+      finalwinner:'',
       hand: {
         stage: "ante",
         currentPlayer: "human",
@@ -205,6 +121,10 @@ export function createApp() {
         bets: {
           human: 0,
           bot: 0,
+        },
+        wins: {
+          human: winsplayer,
+          bot: winsbot,
         },
       },
     };
@@ -246,6 +166,7 @@ export function createApp() {
       game.balances.bot += game.hand.pot;
       game.lastAction = "fold";
       game.winner = "Bot";
+      game.hand.wins.bot += 1
       res.redirect("/");
       return;
     }
@@ -314,18 +235,27 @@ export function createApp() {
       
             if (theWinner == 'main1'){
               game.winner = 'Player';
+              game.hand.wins.human += 1;
               game.balances.human += game.hand.pot;
 
             }
             else if (theWinner == 'main2'){
               game.winner = 'Bot';
+              game.hand.wins.bot += 1;
               game.balances.bot += game.hand.pot;
             }
             else{
-              game.winner = 'draw'
+              game.winner = 'draw';
               const sharing = game.hand.pot/2;
               game.balances.human += sharing;
               game.balances.bot += sharing;
+            }
+
+            if (game.balances.human <= 0){
+              game.finalwinner = "Bot";
+            }
+            if (game.balances.bot <= 0){
+              game.finalwinner = "Player";
             }
 
           }
@@ -408,11 +338,13 @@ export function createApp() {
 
       if (theWinner == 'main1'){
         game.winner = 'Player'
+        game.hand.wins.human += 1;
         game.balances.human += game.hand.pot
 
       }
       else if (theWinner == 'main2'){
         game.winner = 'Bot'
+        game.hand.wins.bot += 1;
         game.balances.bot += game.hand.pot
       }
       else{
@@ -420,6 +352,13 @@ export function createApp() {
         const sharing = game.hand.pot/2;
         game.balances.human += sharing;
         game.balances.bot += sharing;
+      }
+
+      if (game.balances.human <= 0){
+        game.finalwinner = "Bot";
+      }
+      if (game.balances.bot <= 0){
+        game.finalwinner = "Player";
       }
 
     }

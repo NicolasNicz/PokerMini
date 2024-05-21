@@ -31,6 +31,9 @@
             <div class="player-info-jetons">
                  <img class="jeton-info" src="cards/jeton.png"/> x <%=game.balances.bot%>
             </div>
+            <div class="info-nb-wins">
+                Wins : <%=game.hand.wins.bot%>
+            </div>
         </div>
 
         <div class="partie-info">
@@ -43,7 +46,6 @@
                 <b><%=game.lastAction%></b> <br>
                 Stage:
                 <b><%=game.hand.stage%></b>
-
             </div>
         </div>
 
@@ -53,6 +55,9 @@
             </div>
             <div class="player-info-jetons">
                 <img class="jeton-info" src="cards/jeton.png"/> x <%=game.balances.human%>
+            </div>
+            <div class="info-nb-wins">
+                Wins : <%=game.hand.wins.human%>
             </div>
         </div>
 
@@ -150,14 +155,28 @@
         </div>
         
         <% if (game.hand.stage === "Result" || game.lastAction === "fold") { %>
-            <form action="/next-game" method="post">
-                <div class="button-container">
-                    <div class="winner"> 
-                        Winner : <%=game.winner%> + <img class="jeton-show" src="cards/jeton.png"/> x <%=game.hand.pot%>
+
+            <% if (game.finalwinner == "Player" || game.finalwinner == "Bot") { %>
+                <form action="/new-game" method="post">
+                    <div class="button-container">
+                        <div class="winner"> 
+                            Final Winner : <%=game.finalwinner%>
+                        </div>
+                        <button type="submit">Next Game</button>
                     </div>
-                    <button type="submit">Next Round</button>
-                </div>
-            </form>
+                </form>
+            <% } else { %>
+
+                <form action="/next-game" method="post">
+                    <div class="button-container">
+                        <div class="winner"> 
+                            Winner : <%=game.winner%> + <img class="jeton-show" src="cards/jeton.png"/> x <%=game.hand.pot%>
+                        </div>
+                        <button type="submit">Next Round</button>
+                    </div>
+                </form>
+
+            <% } %>
         
         <% } else { %>
             <% if (game.hand.currentPlayer === "human") { %>

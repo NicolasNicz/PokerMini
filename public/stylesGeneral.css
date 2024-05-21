@@ -32,9 +32,13 @@ html{
     border-bottom-right-radius: 5px;
 }
 
+.info-nb-wins{
+    text-align: center;
+}
+
 .partie-info{
     position: static;
-    margin: 112px 0 15px 0;
+    margin: 30px 0 15px 0;
     background-color: #398712;
     border: 3px solid rgb(1, 0, 47);
     border-top: 5px solid #000;
@@ -44,7 +48,7 @@ html{
 
 .player-info{
     position: static;
-    margin: 130px 0 15px 0;
+    margin: 50px 0 15px 0;
     background-color: #398712;
     border: 3px solid rgb(1, 0, 47);
     border-top: 5px solid #000;
@@ -92,8 +96,8 @@ html{
 
 .widget-card{
     margin: 8px;
-    width: 150px;
-    height: 200px;
+    width: 100px;
+    height: 130px;
 }
 
 .widget-hand-title{
@@ -215,91 +219,91 @@ html{
 
 .card-9-P{
     background-image: url(./cards/P_9.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-T-P{
     background-image: url(./cards/P_T.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-J-P{
     background-image: url(./cards/P_J.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-Q-P{
     background-image: url(./cards/P_Q.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-K-P{
     background-image: url(./cards/P_K.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-A-P{
     background-image: url(./cards/P_A.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-9-C{
     background-image: url(./cards/C_9.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-T-C{
     background-image: url(./cards/C_T.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-J-C{
     background-image: url(./cards/C_J.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-Q-C{
     background-image: url(./cards/C_Q.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-K-C{
     background-image: url(./cards/C_K.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-A-C{
     background-image: url(./cards/C_A.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }
 
 .card-Back{
     background-image: url(./cards/Back.png);
-    background-size: 150px 200px;
-    width: 150px;
-    height: 200px;
+    background-size: 100px 130px;
+    width: 100px;
+    height: 130px;
 }

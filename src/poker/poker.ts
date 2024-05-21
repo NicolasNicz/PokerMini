@@ -9,13 +9,13 @@ function findHighestValue(var1: number, var2: number, var3: number) {
 }
 
 function findMiddleValue(var1: number, var2: number, var3: number): number {
-    const sortedValues = [var1, var2, var3].sort((a, b) => a - b); // Tri des valeurs dans l'ordre croissant
-    return sortedValues[1]; // La valeur du milieu est à l'index 1 après le tri
+    const sortedValues = [var1, var2, var3].sort((a, b) => a - b); // tri des vals dans l'ordre croissant
+    return sortedValues[1]; // la val du milieu est à l'index 1 après le tri
 }
 
 function findLowestValue(var1: number, var2: number, var3: number): number {
     const sortedValues = [var1, var2, var3].sort((a, b) => a - b); // Tri des valeurs dans l'ordre croissant
-    return sortedValues[0]; // La valeur la plus basse est à l'index 0 après le tri
+    return sortedValues[0]; // la val la plus basse est à l'index 0 après le tri
 }
 
 function findUniqueValue(var1: number, var2: number, var3: number): number | null {
@@ -177,4 +177,98 @@ function theBestHandIs(nameMain1: string, nameMain2: string, main1: { carte1: an
 }
 
 export { theBestHandIs }
+
+
+
+function drawCard(paquet: any[]) {
+    const index = Math.floor(Math.random() * paquet.length);
+    return paquet.splice(index, 1)[0];
+  }
+
+export { drawCard }
+
+
+function BotAction(randomChoice: any, amount: any){
+  if (randomChoice == 0){
+    return 0;
+  }
+  else if (randomChoice == 1){
+    return amount;
+  }
+  else if (randomChoice == 2){
+    return amount + 2;
+  }
+}
+
+export { BotAction }
+
+
+function refillPackOfCards() {
+  packOfCards.length = 0;
+  packOfCards.push(
+      { ...carte_9, famille: famille_P },
+      { ...carte_T, famille: famille_P },
+      { ...carte_J, famille: famille_P },
+      { ...carte_Q, famille: famille_P },
+      { ...carte_K, famille: famille_P },
+      { ...carte_A, famille: famille_P },
+      { ...carte_9, famille: famille_C },
+      { ...carte_T, famille: famille_C },
+      { ...carte_J, famille: famille_C },
+      { ...carte_Q, famille: famille_C },
+      { ...carte_K, famille: famille_C },
+      { ...carte_A, famille: famille_C }
+  );
+}
+
+export { refillPackOfCards }
+
+
+function newPackOfCards(){
+    return packOfCards;
+}
+
+export { newPackOfCards }
+
+
+type Famille = {
+  name: string;
+};
+type Carte = {
+  name: string;
+  importance: number;
+  famille: Famille;
+};
+const famille_P: Famille = {
+  name: "P"
+};
+const famille_C: Famille = {
+  name: "C"
+};
+const carte_9 = {
+    name : "9",
+    importance : 0
+}
+const carte_T = {
+    name : "T",
+    importance : 1
+}
+const carte_J = {
+    name : "J",
+    importance : 2
+}
+const carte_Q = {
+    name : "Q",
+    importance : 3
+}
+const carte_K = {
+    name : "K",
+    importance : 4
+}
+const carte_A = {
+    name : "A",
+    importance : 5
+}
+const packOfCards: Carte[] = [
+];
 
