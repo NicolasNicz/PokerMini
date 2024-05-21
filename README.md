@@ -1,6 +1,7 @@
 Grille de notation frontend:
 
 
+
   les cartes des joueurs s'affichent (au bon moment) : OUI
  
   la table s'affiche : joueurs (nom+jetons), pot, mises : OUI
@@ -16,6 +17,8 @@ Grille de notation frontend:
 
  
 Grille de notation backend:
+
+
 
  
   Il y a une route pour démarrer la partie : OUI
