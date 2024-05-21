@@ -31,7 +31,10 @@ function findUniqueValue(var1: number, var2: number, var3: number): number | nul
 }
 
 function HandName(main: { carte1: any; carte2: any; carte3: any; }){
-    const lesSuites = ["9+T+J", "T+J+Q", "J+Q+K", "Q+K+A"]
+    const lesSuites = ["9+T+J" , "9+J+T" , "J+T+9" , "J+9+T" , "T+9+J" , "T+J+9"
+                     , "T+J+Q" , "T+Q+J" , "J+Q+T" , "J+T+Q" , "Q+J+T" , "Q+T+J"
+                     , "J+Q+K" , "J+K+Q" , "Q+J+K" , "Q+K+J" , "K+J+Q" , "K+Q+J"
+                     , "Q+K+A" , "Q+A+K" , "K+Q+A" , "K+A+Q" , "A+K+Q" , "A+Q+K"];
 
     const carte1 = main.carte1;
     const carte2 = main.carte2;

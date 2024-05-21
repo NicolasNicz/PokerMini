@@ -12,13 +12,18 @@
 <div class="background">
 
     <% if (!game) { %>
-        <form action="/new-game" method="post">
-        <button type="submit">New game</button>
-    </form>
+        <form class="form-start" action="/new-game" method="post">
+            <button type="submit">New game</button>
+        </form>
     <% } else { %>
 
 
     <div class="bot-info-container">
+
+        <form class="form-reset" action="/new-game" method="post">
+            <button type="submit">New game</button>
+        </form>
+
         <div class="bot-info">
             <div class="player-info-title">
                 Bot
@@ -33,8 +38,12 @@
                 Game
             </div>
             <div class="player-info-jetons">
-                Last action 
-                <%=game.lastAction%>
+                Round : <b> <%=game.round%> </b><br>
+                Last action:
+                <b><%=game.lastAction%></b> <br>
+                Stage:
+                <b><%=game.hand.stage%></b>
+
             </div>
         </div>
 
@@ -62,7 +71,7 @@
             </div>
                 <div class="hands">
                     <% handBot.forEach(function(card) { %>
-                        <% if (game.hand.stage === "showResult") { %>
+                        <% if (game.hand.stage === "Result") { %>
                             <div class="widget-card">
                                 <div class='card-<%= card.rank.name %>-<%= card.suit.name %>'>
                                 </div>
@@ -76,7 +85,7 @@
                     <% }); %>
                 </div>
 
-                <% if (game.hand.stage === "showResult") { %>
+                <% if (game.hand.stage === "Result") { %>
                     <div class="widget-result-title">
                        <%=game.hand.name.bot%>
                     </div>
@@ -116,7 +125,7 @@
                 <% } %>
             </div>
 
-            <% if (game.hand.stage === "showResult") { %>
+            <% if (game.hand.stage === "Result") { %>
                 <div class="widget-result-title">
                    <%=game.hand.name.human%>
                 </div>
@@ -134,19 +143,19 @@
                     </div>
 
                     <div class="widget-hand-title">
-                        Joueur
+                        Player
                     </div>
 
             <% } %>
         </div>
         
-        <% if (game.hand.stage === "showResult" || game.lastAction === "fold") { %>
+        <% if (game.hand.stage === "Result" || game.lastAction === "fold") { %>
             <form action="/next-game" method="post">
                 <div class="button-container">
                     <div class="winner"> 
                         Winner : <%=game.winner%> + <img class="jeton-show" src="cards/jeton.png"/> x <%=game.hand.pot%>
                     </div>
-                    <button type="submit">Next game</button>
+                    <button type="submit">Next Round</button>
                 </div>
             </form>
         

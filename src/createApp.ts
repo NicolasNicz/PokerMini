@@ -131,6 +131,7 @@ export function createApp() {
         human: 100,
         bot: 100,
       },
+      round: 1,
       winner:'',
       hand: {
         stage: "ante",
@@ -179,6 +180,7 @@ export function createApp() {
 
     const currentBalanceBot = game.balances.bot;
     const currentBalanceHuman = game.balances.human;
+    const currentRound = game.round;
 
     hands = {
       human: [],
@@ -190,6 +192,7 @@ export function createApp() {
         human: currentBalanceHuman,
         bot: currentBalanceBot,
       },
+      round: currentRound+1,
       winner:'',
       hand: {
         stage: "ante",
@@ -282,7 +285,7 @@ export function createApp() {
           game.hand.bets.human = 0;
           game.hand.bets.bot = 0;
           if (game.hand.stage === "turn2"){
-            game.hand.stage = 'showResult';
+            game.hand.stage = 'Result';
 
             const mainHuman = {
               carte1 : [hands.human[0].rank, hands.human[0].suit],
@@ -310,7 +313,7 @@ export function createApp() {
             const theWinner = theBestHandIs(nameMainHuman, nameMainBot, mainHuman, mainBot);
       
             if (theWinner == 'main1'){
-              game.winner = 'Joueur';
+              game.winner = 'Player';
               game.balances.human += game.hand.pot;
 
             }
@@ -347,7 +350,7 @@ export function createApp() {
       game.hand.bets.human += numberToCall;
       game.balances.human -= numberToCall;
       if (game.hand.stage === "turn2"){
-        game.hand.stage = 'showResult';
+        game.hand.stage = 'Result';
       }
       else{
         game.lastAction = "finishTurn1";
@@ -373,7 +376,7 @@ export function createApp() {
       hands.bot.push({ rank: randomBotCard3, suit: randomBotCard3.famille });
     }
 
-    if (game.hand.stage === 'showResult'){
+    if (game.hand.stage === 'Result'){
       const potToAdd = game.hand.bets.human + game.hand.bets.bot;
       game.hand.pot += potToAdd;
       game.hand.bets.human = 0;
@@ -404,7 +407,7 @@ export function createApp() {
       const theWinner = theBestHandIs(nameMainHuman, nameMainBot, mainHuman, mainBot);
 
       if (theWinner == 'main1'){
-        game.winner = 'Joueur'
+        game.winner = 'Player'
         game.balances.human += game.hand.pot
 
       }
