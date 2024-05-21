@@ -1,11 +1,6 @@
 function findHighestValue(var1: number, var2: number, var3: number) {
-    if (var1 >= var2 && var1 >= var3) {
-        return var1;
-    } else if (var2 >= var1 && var2 >= var3) {
-        return var2;
-    } else {
-        return var3;
-    }
+    const sortedValues = [var1, var2, var3].sort((a, b) => a - b); // tri des vals dans l'ordre croissant
+    return sortedValues[2]; // la val du max est à l'index 2 après le tri
 }
 
 function findMiddleValue(var1: number, var2: number, var3: number): number {
